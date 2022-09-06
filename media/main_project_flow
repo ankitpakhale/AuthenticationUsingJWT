@@ -1,0 +1,14 @@
+average of width in boundung box
+
+
+main project
+
+1. flow
+input
+textbox++ (advanced version of SSD)	--> json with coordinates
+
+Prediction algorithm --> CRNN (advanced version of CNN)
+
+2. flow	
+Prediction algorithm --> one-to-one prediction (advanced version of OpenCV)
+
