@@ -5,3 +5,9 @@ class Student_serializer(serializers.ModelSerializer):
     class Meta:
         model = Student_model
         fields = '__all__'
+
+class Student_update_serializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+    class Meta:
+        model = Student_model
+        fields = '__all__'

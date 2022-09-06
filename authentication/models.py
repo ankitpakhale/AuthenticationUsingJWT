@@ -7,6 +7,6 @@ class Student_model(models.Model):
     email =     models.EmailField()
     sem =       models.IntegerField()
     is_active = models.BooleanField()   #BY DEFAULT IT IS FALSE
-    doc =       models.FileField(upload_to='docs/')
+    doc =       models.FileField(upload_to='')
     def __str__(self):
         return self.name
