@@ -2,8 +2,10 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import datetime
 from rest_framework.views import APIView
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 from .serializer import *
 from .models import *
 # Create your views here.
@@ -27,10 +29,17 @@ class HelloView(APIView):
 
 class Student_data(APIView):
     # permission_classes = (IsAuthenticated,)
+    serializer_class = Student_serializer
     def get(self, request):
-        stu_data = Student_serializer(Student_model.objects.all(), many = True)
-        print(stu_data)
-        return Response(stu_data.data)
-    
-    # def post(self, request):
-    #     pass
+        data = Student_model.objects.all()
+        serializer = self.serializer_class(data, many=True)
+        print('---------GET--',serializer)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            print('---------POST--',serializer)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
