@@ -1,9 +1,5 @@
-from multiprocessing import AuthenticationError
-from django.shortcuts import render
-from django.http import HttpResponse
 import datetime
 from rest_framework.views import APIView
-from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -12,17 +8,10 @@ from .serializer import *
 from .models import *
 # Create your views here.
 
-def demo(request):
-    permission_classes = (IsAuthenticated,)
-    if permission_classes:
-        now = datetime.datetime.now()
-        html = "<html><body><h2>It is now %s.</h2></body></html>" % now
-        return HttpResponse(html)
-    else:
-        return HttpResponse("You are not allowed to enter because you don't have permission_classes")
-
 class HelloView(APIView):
-    permission_classes = (IsAuthenticated,)
+    authentication_classes=[JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         now = datetime.datetime.now()
         timeHTML = f"It is now {now}."
@@ -30,7 +19,9 @@ class HelloView(APIView):
         return Response(content)
 
 class Get_data(APIView):
-    # permission_classes = (IsAuthenticated,)
+    authentication_classes=[JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     serializer_class = Student_serializer
     def get(self, request):
         data = Student_model.objects.all()
@@ -39,7 +30,9 @@ class Get_data(APIView):
         return Response(serializer.data)
 
 class Post_data(APIView):
-    # permission_classes = (IsAuthenticated,)
+    authentication_classes=[JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     serializer_class = Student_serializer
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -50,9 +43,9 @@ class Post_data(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class Student_data(APIView):
-    # permission_classes = (IsAuthenticated,)
-    # authentication_classes=[JWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes=[JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     serializer_class = Student_serializer
     def get(self, request):
         data = Student_model.objects.all()
@@ -70,15 +63,16 @@ class Student_data(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class Update_data(APIView):
-    # permission_classes = (IsAuthenticated,)
+    # authentication_classes=[JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
+
     serializer_class = Student_update_serializer
-    def get(self, request):
-        data = Student_model.objects.all()
-        serializer = self.serializer_class(data, many=True)
+    def get(self, request, id):
+        data = Student_model.objects.get(id=id)
+        serializer = self.serializer_class(data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
         
-    def put(self, request, *args, **kwargs):
-        id = request.data['id']
+    def put(self, request, id):
         stu_object = Student_model.objects.get(id=id)
         serializer = self.serializer_class(stu_object, data=request.data)
         if serializer.is_valid():
@@ -87,10 +81,9 @@ class Update_data(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class Patch_data(APIView):
-    '''
-        Not Working properly
-    '''
-    # permission_classes = (IsAuthenticated,)
+    authentication_classes=[JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     serializer_class = Student_update_serializer
     def get(self, request):
         data = Student_model.objects.all()
@@ -107,7 +100,9 @@ class Patch_data(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class Delete_data(APIView):
-    # permission_classes = (IsAuthenticated,)
+    authentication_classes=[JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     serializer_class = Student_update_serializer
     def get(self, request, id):
         data = Student_model.objects.get(id=id)

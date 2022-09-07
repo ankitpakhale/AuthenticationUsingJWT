@@ -8,11 +8,11 @@ class Student_data(models.Model):
         return self.stu_dept
 
 class Student_model(models.Model):
-    dept =     models.ForeignKey(Student_data, on_delete=models.CASCADE)
-    name =      models.CharField(max_length=100)
-    email =     models.EmailField()
-    sem =       models.IntegerField()
-    is_active = models.BooleanField()   #BY DEFAULT IT IS FALSE
-    doc =       models.FileField(upload_to='')
+    dept =     models.ForeignKey(Student_data, on_delete=models.CASCADE, null= True, blank=True)
+    name =      models.CharField(max_length=100, null= True, blank=True)
+    email =     models.EmailField(null= True, blank=True)
+    sem =       models.IntegerField(null= True, blank=True)
+    is_active = models.BooleanField(null= True, blank=True)   #BY DEFAULT IT IS FALSE
+    doc =       models.FileField(upload_to='', null= True, blank=True)
     def __str__(self):
         return self.name

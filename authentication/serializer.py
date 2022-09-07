@@ -17,7 +17,7 @@ class Student_serializer(serializers.ModelSerializer):
         return rep
 
 class Student_update_serializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
+    # id = serializers.IntegerField()
     class Meta:
         model = Student_model
         fields = '__all__'
