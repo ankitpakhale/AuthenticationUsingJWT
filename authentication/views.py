@@ -1,3 +1,4 @@
+from multiprocessing import AuthenticationError
 from django.shortcuts import render
 from django.http import HttpResponse
 import datetime
@@ -5,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
 from .serializer import *
 from .models import *
@@ -49,10 +51,15 @@ class Post_data(APIView):
 
 class Student_data(APIView):
     # permission_classes = (IsAuthenticated,)
+    # authentication_classes=[JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
     serializer_class = Student_serializer
     def get(self, request):
         data = Student_model.objects.all()
         serializer = self.serializer_class(data, many=True)
+        
+        print(len('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYyNTIyMjY0LCJpYXQiOjE2NjI1MjE5NjQsImp0aSI6ImM4OTkxMGVmMDViNzQwM2ViY2M2NDdkZWVhMWJjZTE5IiwidXNlcl9pZCI6MX0.GEq4rV1HaY61_ECuprtMp_CdxG7bv4BiFv5pvnMxEUE'))
+        
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def post(self, request):
