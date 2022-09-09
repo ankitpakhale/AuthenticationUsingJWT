@@ -6,7 +6,6 @@ class Student_data_serializer(serializers.ModelSerializer):
         model = Student_data
         fields = ('stu_dept')
 
-
 class Student_serializer(serializers.ModelSerializer):
     class Meta:
         model = Student_model
